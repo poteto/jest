@@ -13,6 +13,7 @@ var fs = require('fs');
 var harmonize = require('harmonize');
 var optimist = require('optimist');
 var path = require('path');
+var exit = require('exit');
 
 /**
  * Takes a description string, puts it on the next line, indents it, and makes
@@ -106,11 +107,11 @@ var argv = optimist
       );
     }
   })
-  .argv
+  .argv;
 
 if (argv.help) {
   optimist.showHelp();
-  process.exit(0);
+  exit(0);
 }
 
 var cwd = process.cwd();
@@ -145,7 +146,7 @@ if (fs.existsSync(cwdJestBinPath)) {
       'installed globally.\n' +
       'Please upgrade this project past Jest version 0.1.5'
     );
-    process.exit(1);
+    exit(1);
   }
 } else {
   // Otherwise, load this version of Jest.
@@ -165,7 +166,7 @@ if (fs.existsSync(cwdJestBinPath)) {
         'Please run `npm install` to use the version of Jest intended for ' +
         'this project.'
       );
-      process.exit(1);
+      exit(1);
     }
   }
 }
@@ -175,5 +176,5 @@ if (!argv.version) {
 }
 
 jest.runCLI(argv, cwdPackageRoot, function (success) {
-  process.exit(success ? 0 : 1);
+  exit(success ? 0 : 1);
 });
